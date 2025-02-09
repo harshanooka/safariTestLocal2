@@ -1,34 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Website 2 - Set Dark Theme</title>
+    <title>Website 1 - Set Dark Theme</title>
 </head>
 <body>
-    <h1>Website 2</h1>
+    <h1>Website 1</h1>
     <button onclick="setTheme()">Set Dark Theme</button>
     <button onclick="getTheme()">Get Theme</button>
 
     <script>
         const iframe = document.createElement("iframe");
-        iframe.src = "https://safari-test-one.vercel.app"; // Storage iframe
+        iframe.src = "https://safari-test-one.vercel.app"; 
         iframe.style.display = "none";
         document.body.appendChild(iframe);
 
         function sendMessage(action, key, value = null) {
             return new Promise((resolve) => {
                 function listener(event) {
+                    console.log("📩 Message received in client:", event.data);
                     if (event.origin === "https://safari-test-one.vercel.app") {
                         resolve(event.data.value);
                         window.removeEventListener("message", listener);
                     }
                 }
                 window.addEventListener("message", listener);
+                console.log(`📤 Sending message: ${action} ${key} = ${value}`);
                 iframe.contentWindow.postMessage({ action, key, value }, "https://safari-test-one.vercel.app");
             });
         }
 
         function setTheme() {
-            sendMessage("set", "theme", "dark").then(() => console.log("Dark theme set in IndexedDB!"));
+            sendMessage("set", "theme", "Dark").then(() => console.log("Dark theme set in IndexedDB!"));
         }
 
         function getTheme() {
